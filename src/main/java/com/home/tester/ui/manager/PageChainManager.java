@@ -32,7 +32,7 @@ public class PageChainManager implements AsSubscriber{
     @Override
     public void subscribe() {
         SubjectsStore.stateSubject.subscribe(state -> {
-            switch (state) {
+            switch (state.getState()) {
                 case DASHBOARD:{
                     this.mainFrame.setContentPanel(dashboardPanel);
                     break;
