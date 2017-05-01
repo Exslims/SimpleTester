@@ -1,4 +1,4 @@
-package com.home.tester.entity;
+package com.home.tester.core.entity;
 
 /**
  * Created by Константин on 27.04.2017.
