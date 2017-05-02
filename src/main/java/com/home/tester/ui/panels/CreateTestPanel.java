@@ -2,12 +2,7 @@ package com.home.tester.ui.panels;
 
 import com.home.tester.ui.BaseJPanel;
 
-import javax.swing.*;
-
-/**
- * Created by Константин on 01.05.2017.
- */
-public class ResultAreaPanel extends BaseJPanel {
+public class CreateTestPanel extends BaseJPanel {
     @Override
     protected void init() {
 
@@ -16,5 +11,11 @@ public class ResultAreaPanel extends BaseJPanel {
     @Override
     protected void validateForm() {
 
+    }
+
+    @Override
+    protected void onFinish() {
+
+        super.onFinish();
     }
 }

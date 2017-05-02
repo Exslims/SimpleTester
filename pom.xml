@@ -11,6 +11,7 @@
     <properties>
         <rxjava.version>1.2.9</rxjava.version>
         <lombok.version>1.16.8</lombok.version>
+        <imgscallar.version>4.2</imgscallar.version>
     </properties>
 
     <dependencies>
@@ -23,6 +24,11 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.imgscalr</groupId>
+            <artifactId>imgscalr-lib</artifactId>
+            <version>${imgscallar.version}</version>
         </dependency>
     </dependencies>
 
