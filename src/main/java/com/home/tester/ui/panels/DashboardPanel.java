@@ -4,13 +4,13 @@ package com.home.tester.ui.panels;
 import com.home.tester.core.ApplicationReducer;
 import com.home.tester.core.ApplicationState;
 import com.home.tester.core.SubjectsStore;
-import com.home.tester.ui.BaseJPanel;
+import com.home.tester.ui.PageJPanel;
 
 import javax.swing.*;
 import java.awt.*;
 
 
-public class DashboardPanel extends BaseJPanel{
+public class DashboardPanel extends PageJPanel {
 
     @Override
     protected void init() {
@@ -28,10 +28,5 @@ public class DashboardPanel extends BaseJPanel{
         root.add(createTest);
         root.add(editTest);
         this.add(root,BorderLayout.CENTER);
-    }
-
-    @Override
-    protected void validateForm() {
-        /*NOPE*/
     }
 }

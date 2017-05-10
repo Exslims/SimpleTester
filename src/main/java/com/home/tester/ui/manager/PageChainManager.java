@@ -3,6 +3,7 @@ package com.home.tester.ui.manager;
 
 import com.home.tester.core.SubjectsStore;
 import com.home.tester.core.AsSubscriber;
+import com.home.tester.core.entity.TestDescriptor;
 import com.home.tester.ui.MainFrame;
 import com.home.tester.ui.panels.CreateTestPanel;
 import com.home.tester.ui.panels.DashboardPanel;
@@ -35,6 +36,7 @@ public class PageChainManager implements AsSubscriber{
     }
 
     @Override
+    @SuppressWarnings("all")
     public void subscribe() {
         SubjectsStore.stateSubject.subscribe(state -> {
             switch (state.getState()) {
@@ -51,6 +53,7 @@ public class PageChainManager implements AsSubscriber{
                     break;
                 }
                 case CREATE_TEST: {
+                    this.createTestPanel.setPayload(new TestDescriptor());
                     this.mainFrame.setContentPanel(createTestPanel);
                 }
             }

@@ -7,27 +7,26 @@ import com.home.tester.core.SubjectsStore;
 import javax.swing.*;
 import java.awt.*;
 
-public abstract class BaseJPanel<T> extends JPanel {
+public abstract class PageJPanel<T> extends JPanel {
     protected JButton backButton;
     protected JButton finishButton;
     protected T payload;
     protected ComponentsFactory componentsFactory = new ComponentsFactory();
-    protected BaseJPanel(){
+    protected PageJPanel(){
         super(new BorderLayout());
         this.setBackground(AppThemeColor.BACKGROUND_DARK);
         this.createNavigationBar();
         init();
     }
     protected abstract void init();
-    protected abstract void validateForm();
     protected void onFinish(){
         SubjectsStore.stateSubject.onNext(new ApplicationReducer<>(ApplicationState.DASHBOARD,null));
     }
     public void setPayload(T payload) {
         this.payload = payload;
-        validateForm();
+        this.init();
     }
-    private void createNavigationBar(){
+    protected void createNavigationBar(){
         JPanel root = this.componentsFactory.getJPanel(new BorderLayout());
         root.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 
@@ -40,7 +39,7 @@ public abstract class BaseJPanel<T> extends JPanel {
         this.finishButton = componentsFactory.getButton("FINISH");
         this.finishButton.setPreferredSize(new Dimension(110,30));
         this.finishButton.addActionListener(action -> onFinish());
-        this.finishButton.setBackground(AppThemeColor.FOREGROUND);
+        this.finishButton.setBackground(AppThemeColor.DARK_PRIMARY_COLOR);
         this.finishButton.setForeground(AppThemeColor.BACKGROUND);
 
         root.add(backButton,BorderLayout.LINE_START);
