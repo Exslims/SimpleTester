@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class Answer {
-    private String title;
+    private String text;
     private boolean right;
 }

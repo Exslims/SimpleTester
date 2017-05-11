@@ -14,7 +14,7 @@ public class ScrollUI extends BasicScrollBarUI {
         this.scrollColor = color;
     }
     public ScrollUI() {
-        this.scrollColor = AppThemeColor.DARK_PRIMARY_COLOR;
+        this.scrollColor = AppThemeColor.PRIMARY_COLOR;
     }
 
     @Override

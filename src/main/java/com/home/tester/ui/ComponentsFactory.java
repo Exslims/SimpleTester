@@ -36,11 +36,36 @@ public class ComponentsFactory {
         label.setFont(REGULAR_FONT.deriveFont(18f));
         return label;
     }
+    public JLabel getLabel(String text, float size, Color foreground) {
+        JLabel label = new JLabel(text);
+        label.setForeground(foreground);
+        label.setFont(REGULAR_FONT.deriveFont(size));
+        return label;
+    }
     public JTextField getTextField(String text){
         JTextField textField = new JTextField(text);
         textField.setForeground(AppThemeColor.PRIMARY_TEXT);
         textField.setFont(REGULAR_FONT.deriveFont(18f));
         return textField;
+    }
+    public JLabel getIconLabel(String iconPath, int iconSize) {
+        JLabel label = new JLabel("");
+        label.setBorder(null);
+        label.setForeground(AppThemeColor.PRIMARY_COLOR);
+        label.setFont(BOLD_FONT.deriveFont(24f));
+        label.setBackground(AppThemeColor.BACKGROUND);
+        label.setVerticalAlignment(SwingConstants.CENTER);
+        BufferedImage icon = null;
+        try {
+            BufferedImage buttonIcon = ImageIO.read(getClass().getClassLoader().getResource(iconPath));
+            icon = Scalr.resize(buttonIcon, iconSize);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(icon != null){
+            label.setIcon(new ImageIcon(icon));
+        }
+        return label;
     }
     public JButton getIconButton(String iconPath, int iconSize, String text) {
         JButton button = new JButton(""){
@@ -51,8 +76,8 @@ public class ComponentsFactory {
                 }
             }
         };
-        button.setBorder(BorderFactory.createLineBorder(AppThemeColor.DARK_PRIMARY_COLOR));
-        button.setForeground(AppThemeColor.DARK_PRIMARY_COLOR);
+        button.setBorder(null);
+        button.setForeground(AppThemeColor.PRIMARY_COLOR);
         button.setFont(BOLD_FONT.deriveFont(24f));
         button.setText(text);
         button.setBackground(AppThemeColor.BACKGROUND);
@@ -84,8 +109,8 @@ public class ComponentsFactory {
                 }
             }
         };
-        button.setBorder(BorderFactory.createLineBorder(AppThemeColor.DARK_PRIMARY_COLOR));
-        button.setForeground(AppThemeColor.DARK_PRIMARY_COLOR);
+        button.setBorder(BorderFactory.createLineBorder(AppThemeColor.PRIMARY_COLOR));
+        button.setForeground(AppThemeColor.PRIMARY_COLOR);
         button.setFont(BOLD_FONT.deriveFont(24f));
         button.setText(text);
         button.setBackground(AppThemeColor.BACKGROUND);

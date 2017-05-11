@@ -1,5 +1,8 @@
 package com.home.tester.ui.panels;
 
+import com.home.tester.core.AsSubscriber;
+import com.home.tester.core.SubjectsStore;
+import com.home.tester.core.entity.Answer;
 import com.home.tester.core.entity.QuestionBlock;
 import com.home.tester.core.entity.TestDescriptor;
 import com.home.tester.ui.AppThemeColor;
@@ -12,25 +15,27 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-public class CreateTestPanel extends PageJPanel {
+public class CreateTestPanel extends PageJPanel implements AsSubscriber{
     private VerticalScrollContainer entriesContainer;
+    private JPanel root;
     @Override
     protected void init() {
         if(this.payload != null) {
             this.removeAll();
             this.createNavigationBar();
             this.createForm();
+            this.subscribe();
         }
     }
     private void createForm(){
-        JPanel root = this.componentsFactory.getJPanel(new BorderLayout());
-        root.setBorder(BorderFactory.createEmptyBorder(4,4,4,4));
+        this.root = this.componentsFactory.getJPanel(new BorderLayout());
+        this.root.setBorder(BorderFactory.createEmptyBorder(4,4,4,4));
 
-
-        root.add(getGeneralPanel(),BorderLayout.PAGE_START);
-        root.add(new QuestionBlockAreaPanel(new QuestionBlock("Title#",null)),BorderLayout.CENTER);
-        this.add(getTestEntriesPanel(),BorderLayout.LINE_END);
+        this.root.add(getGeneralPanel(),BorderLayout.PAGE_START);
+        this.add(getListEntryPanel(),BorderLayout.LINE_END);
         this.add(root, BorderLayout.CENTER);
     }
     private JPanel getGeneralPanel() {
@@ -52,14 +57,38 @@ public class CreateTestPanel extends PageJPanel {
         generalPanel.add(thresholdField);
         return generalPanel;
     }
-    private JScrollPane getTestEntriesPanel(){
+    private JScrollPane getListEntryPanel(){
         this.entriesContainer = new VerticalScrollContainer();
         this.entriesContainer.setBackground(AppThemeColor.BACKGROUND);
         this.entriesContainer.setLayout(new BoxLayout(this.entriesContainer,BoxLayout.Y_AXIS));
+        this.entriesContainer.setMaximumSize(this.getPreferredSize());
         JScrollPane scrollPane = this.componentsFactory.getScrollPane(this.entriesContainer);
-        for (int i = 0; i < 7; i++) {
-            this.entriesContainer.add(new QuestionBlockPanel(new QuestionBlock("Block#" + i,null)));
-        }
+        scrollPane.setPreferredSize(new Dimension(200,30));
+
+        JPanel miscPanel = this.componentsFactory.getJPanel(new BorderLayout());
+        JButton addNewButton = this.componentsFactory.getIconButton("app/add_block.png", 30, "");
+
+
+        addNewButton.addActionListener(action -> {
+            Component layoutComponent = ((BorderLayout) this.root.getLayout()).getLayoutComponent(BorderLayout.CENTER);
+            if(layoutComponent != null) {
+                this.root.remove(layoutComponent);
+            }
+            QuestionBlock newBlock = new QuestionBlock("Title#", new ArrayList<>());
+
+            this.root.add(new QuestionBlockAreaPanel(newBlock),BorderLayout.CENTER);
+            this.entriesContainer.add(new QuestionBlockPanel(newBlock));
+
+            SubjectsStore.packSubject.onNext(true);
+        });
+        miscPanel.add(this.componentsFactory.getLabel("Questions:"),BorderLayout.CENTER);
+        miscPanel.add(addNewButton,BorderLayout.LINE_END);
+
+        this.entriesContainer.add(miscPanel);
+        ((TestDescriptor) this.payload).getQuestionBlocks().forEach(block -> {
+            this.entriesContainer.add(new QuestionBlockPanel(block));
+        });
+
         return scrollPane;
     }
 
@@ -85,6 +114,21 @@ public class CreateTestPanel extends PageJPanel {
             }
         });
     }
+
+    @Override
+    public void subscribe() {
+        SubjectsStore.blockRemovingSubject.subscribe(block -> {
+            Arrays.stream(this.entriesContainer.getComponents()).forEach(component -> {
+                if(component instanceof QuestionBlockPanel){
+                    if(((QuestionBlockPanel) component).getBlock().equals(block)){
+                        this.entriesContainer.remove(component);
+                        SubjectsStore.packSubject.onNext(true);
+                    }
+                }
+            });
+        });
+    }
+
     private enum DataType {
         TEST_TITLE, THRESHOLD
     }
