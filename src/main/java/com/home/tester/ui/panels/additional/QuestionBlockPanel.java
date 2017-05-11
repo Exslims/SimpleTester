@@ -16,20 +16,34 @@ import java.awt.event.MouseEvent;
 public class QuestionBlockPanel extends BaseJPanel implements AsSubscriber {
     @Getter
     private QuestionBlock block;
+    private boolean selected;
+
     public QuestionBlockPanel(QuestionBlock block) {
         super();
         this.block = block;
+        this.selected = true;
+        SubjectsStore.blockSelectingSubject.onNext(block);
         this.setBackground(AppThemeColor.BACKGROUND);
         this.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createEmptyBorder(0,2,2,2),
-                BorderFactory.createLineBorder(AppThemeColor.DIVIDER_COLOR)));
+                BorderFactory.createLineBorder(AppThemeColor.PRIMARY_COLOR)));
 
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-               setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createEmptyBorder(0,2,2,2),
-                        BorderFactory.createLineBorder(AppThemeColor.PRIMARY_COLOR)));
+                if(selected){
+                    setBorder(BorderFactory.createCompoundBorder(
+                            BorderFactory.createEmptyBorder(0,2,2,2),
+                            BorderFactory.createLineBorder(AppThemeColor.DIVIDER_COLOR)));
+                    selected = false;
+                    SubjectsStore.blockSelectingSubject.onNext(null);
+                }else {
+                    setBorder(BorderFactory.createCompoundBorder(
+                            BorderFactory.createEmptyBorder(0,2,2,2),
+                            BorderFactory.createLineBorder(AppThemeColor.PRIMARY_COLOR)));
+                    selected = true;
+                    SubjectsStore.blockSelectingSubject.onNext(block);
+                }
             }
         });
         this.subscribe();
@@ -39,7 +53,7 @@ public class QuestionBlockPanel extends BaseJPanel implements AsSubscriber {
     protected void createView(){
         JPanel miscPanel = this.componentsFactory.getJPanel(new BorderLayout());
 
-        miscPanel.add(this.componentsFactory.getLabel(this.block.getTitle()),BorderLayout.CENTER);
+        miscPanel.add(this.componentsFactory.getLabel(this.block.getTitle(),16f,AppThemeColor.PRIMARY_TEXT),BorderLayout.CENTER);
         JButton removeButton = this.componentsFactory.getIconButton("app/remove.png", 20, "");
         removeButton.addActionListener(action ->
                 SubjectsStore.blockRemovingSubject.onNext(this.block));
@@ -66,6 +80,14 @@ public class QuestionBlockPanel extends BaseJPanel implements AsSubscriber {
                 this.removeAll();
                 this.createView();
                 SubjectsStore.packSubject.onNext(true);
+            }
+        });
+        SubjectsStore.blockSelectingSubject.subscribe(block -> {
+            if(!this.block.equals(block)){
+                this.selected = false;
+                setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createEmptyBorder(0,2,2,2),
+                        BorderFactory.createLineBorder(AppThemeColor.DIVIDER_COLOR)));
             }
         });
     }

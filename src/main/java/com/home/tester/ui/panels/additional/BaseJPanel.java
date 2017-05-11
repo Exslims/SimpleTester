@@ -6,9 +6,6 @@ import com.home.tester.ui.ComponentsFactory;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * Created by Константин on 10.05.2017.
- */
 public abstract class BaseJPanel extends JPanel {
     protected ComponentsFactory componentsFactory = new ComponentsFactory();
     public BaseJPanel(){

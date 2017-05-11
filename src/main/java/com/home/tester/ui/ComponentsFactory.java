@@ -135,7 +135,7 @@ public class ComponentsFactory {
         return panel;
     }
     public JPanel getGridJPanel(int col,int row){
-        JPanel panel = new JPanel(new GridLayout(row,col));
+        JPanel panel = new JPanel(new GridLayout(row,col,0,5));
         panel.setBackground(AppThemeColor.BACKGROUND);
         return panel;
     }

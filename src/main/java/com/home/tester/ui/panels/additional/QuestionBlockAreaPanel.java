@@ -1,9 +1,12 @@
 package com.home.tester.ui.panels.additional;
 
+import com.home.tester.core.AsSubscriber;
 import com.home.tester.core.SubjectsStore;
 import com.home.tester.core.entity.Answer;
 import com.home.tester.core.entity.QuestionBlock;
 import com.home.tester.ui.AppThemeColor;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,20 +14,46 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 
-public class QuestionBlockAreaPanel extends BaseJPanel{
+public class QuestionBlockAreaPanel extends BaseJPanel implements AsSubscriber{
+    @Getter @Setter
     private QuestionBlock block;
+
+    private GridBagConstraints checkC;
+    private GridBagConstraints textC;
+    private GridBagConstraints removeC;
+
     public QuestionBlockAreaPanel(QuestionBlock block) {
         super();
         this.block = block;
         this.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createMatteBorder(0,1,1,1,AppThemeColor.DIVIDER_COLOR),
-                BorderFactory.createEmptyBorder(4,4,4,4)
+                BorderFactory.createMatteBorder(1,1,1,1,AppThemeColor.DIVIDER_COLOR),
+                BorderFactory.createEmptyBorder(8,4,8,4)
         ));
         this.createView();
+        this.subscribe();
     }
 
     @Override
     protected void createView() {
+        this.checkC = new GridBagConstraints();
+        this.textC = new GridBagConstraints();
+        this.removeC = new GridBagConstraints();
+
+        this.checkC.weightx = 0.05f;
+        this.textC.weightx = 0.9f;
+        this.removeC.weightx = 0.05f;
+
+        this.checkC.fill = GridBagConstraints.HORIZONTAL;
+        this.textC.fill = GridBagConstraints.HORIZONTAL;
+        this.removeC.fill = GridBagConstraints.HORIZONTAL;
+
+        this.checkC.gridx = 0;
+        this.textC.gridx = 1;
+        this.removeC.gridx = 2;
+        this.checkC.gridy = 0;
+        this.textC.gridy = 0;
+        this.removeC.gridy = 0;
+
         this.add(getTitlePanel(),BorderLayout.PAGE_START);
         this.add(getAnswersArea(),BorderLayout.CENTER);
 
@@ -36,39 +65,46 @@ public class QuestionBlockAreaPanel extends BaseJPanel{
         JTextField titleField = this.componentsFactory.getTextField(this.block.getTitle());
         titleField.addKeyListener(new KeyAdapter() {
             @Override
-            public void keyPressed(KeyEvent e) {
+            public void keyReleased(KeyEvent e) {
                 block.setTitle(titleField.getText());
                 SubjectsStore.blockChangedSubject.onNext(block);
             }
         });
 
-        titlePanel.add(this.componentsFactory.getLabel("Title: "));
+        titlePanel.add(this.componentsFactory.getLabel("Question title: "));
         titlePanel.add(titleField);
-
-        JPanel additionalPanel = this.componentsFactory.getJPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton addButton = this.componentsFactory.getIconButton("app/save_block.png", 30, "");
-        additionalPanel.add(addButton);
-
         root.add(titlePanel,BorderLayout.CENTER);
-        root.add(additionalPanel,BorderLayout.LINE_END);
         return root;
     }
     private JPanel getAnswersArea(){
         JPanel root = this.componentsFactory.getJPanel(new BorderLayout());
-        JPanel answersPanel = this.componentsFactory.getGridJPanel(3, 0);
+        JPanel answersPanel = this.componentsFactory.getJPanel(new GridBagLayout());
 
-        answersPanel.add(this.componentsFactory.getLabel("",SwingConstants.CENTER));
-        answersPanel.add(this.componentsFactory.getLabel("Text",SwingConstants.CENTER));
-        answersPanel.add(this.componentsFactory.getLabel(""));
+        answersPanel.add(this.componentsFactory.getLabel("",SwingConstants.CENTER),this.checkC);
+        answersPanel.add(this.componentsFactory.getLabel("Text",SwingConstants.CENTER),this.textC);
+        answersPanel.add(this.componentsFactory.getLabel(""),this.removeC);
 
-        this.addRow(answersPanel);
+        this.checkC.gridy++;
+        this.textC.gridy++;
+        this.removeC.gridy++;
+
+        if(this.block.getAnswers().size() == 0){
+            Answer answer = new Answer("Answer#1", false);
+            this.block.getAnswers().add(answer);
+            this.addRow(answersPanel, answer);
+        }else {
+            this.block.getAnswers().forEach(answer ->
+                    this.addRow(answersPanel,answer));
+        }
 
         root.add(answersPanel,BorderLayout.PAGE_START);
 
         JPanel additionalPanel = this.componentsFactory.getJPanel(new BorderLayout());
         JButton addRowButton = this.componentsFactory.getIconButton("app/add_answer.png", 30, "");
         addRowButton.addActionListener(action -> {
-            this.addRow(answersPanel);
+            Answer answer = new Answer("Answer#1", false);
+            this.addRow(answersPanel,answer);
+            this.block.getAnswers().add(answer);
             SubjectsStore.blockChangedSubject.onNext(this.block);
         });
         additionalPanel.add(addRowButton,BorderLayout.PAGE_START);
@@ -76,25 +112,21 @@ public class QuestionBlockAreaPanel extends BaseJPanel{
         root.add(additionalPanel,BorderLayout.CENTER);
         return root;
     }
-    private void addRow(JPanel answersPanel){
-        Answer answer = new Answer();
-        answer.setText("Answer#1");
-        this.block.getAnswers().add(answer);
-
-        JTextField answerField = this.componentsFactory.getTextField("Answer#1");
+    private void addRow(JPanel answersPanel, Answer answer){
+        JTextField answerField = this.componentsFactory.getTextField(answer.getText());
         answerField.addKeyListener(new KeyAdapter() {
             @Override
-            public void keyPressed(KeyEvent e) {
+            public void keyReleased(KeyEvent e) {
                 answer.setText(answerField.getText());
                 SubjectsStore.blockChangedSubject.onNext(block);
             }
         });
-        CheckBoxButton checkBoxButton = new CheckBoxButton(false, isSelected -> {
+        CheckBoxButton checkBoxButton = new CheckBoxButton(answer.isRight(), isSelected -> {
             answer.setRight(isSelected);
             SubjectsStore.blockChangedSubject.onNext(this.block);
         },30);
-        answersPanel.add(checkBoxButton);
-        answersPanel.add(answerField);
+        answersPanel.add(checkBoxButton,this.checkC);
+        answersPanel.add(answerField,this.textC);
         JButton deleteButton = this.componentsFactory.getIconButton("app/delete_answer.png", 30, "");
         deleteButton.addActionListener(e -> {
             this.block.getAnswers().remove(answer);
@@ -105,8 +137,24 @@ public class QuestionBlockAreaPanel extends BaseJPanel{
             SubjectsStore.packSubject.onNext(true);
             SubjectsStore.blockChangedSubject.onNext(this.block);
         });
-        answersPanel.add(deleteButton);
+        answersPanel.add(deleteButton,this.removeC);
 
         SubjectsStore.packSubject.onNext(true);
+
+        this.checkC.gridy++;
+        this.textC.gridy++;
+        this.removeC.gridy++;
+    }
+
+    @Override
+    public void subscribe() {
+        SubjectsStore.blockSelectingSubject.subscribe(block -> {
+            this.setBlock(block);
+            this.removeAll();
+            if(block != null) {
+                this.createView();
+            }
+            SubjectsStore.packSubject.onNext(true);
+        });
     }
 }

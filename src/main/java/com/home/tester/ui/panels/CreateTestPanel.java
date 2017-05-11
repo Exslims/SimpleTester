@@ -2,13 +2,13 @@ package com.home.tester.ui.panels;
 
 import com.home.tester.core.AsSubscriber;
 import com.home.tester.core.SubjectsStore;
-import com.home.tester.core.entity.Answer;
 import com.home.tester.core.entity.QuestionBlock;
 import com.home.tester.core.entity.TestDescriptor;
 import com.home.tester.ui.AppThemeColor;
 import com.home.tester.ui.PageJPanel;
 import com.home.tester.ui.panels.additional.QuestionBlockAreaPanel;
 import com.home.tester.ui.panels.additional.QuestionBlockPanel;
+import com.home.tester.ui.panels.additional.UIUtils;
 import com.home.tester.ui.panels.utils.VerticalScrollContainer;
 
 import javax.swing.*;
@@ -32,6 +32,7 @@ public class CreateTestPanel extends PageJPanel implements AsSubscriber{
     }
     private void createForm(){
         this.root = this.componentsFactory.getJPanel(new BorderLayout());
+        this.root.setBackground(AppThemeColor.BACKGROUND_DARK);
         this.root.setBorder(BorderFactory.createEmptyBorder(4,4,4,4));
 
         this.root.add(getGeneralPanel(),BorderLayout.PAGE_START);
@@ -42,7 +43,7 @@ public class CreateTestPanel extends PageJPanel implements AsSubscriber{
         JPanel generalPanel = this.componentsFactory.getGridJPanel(2,2);
         generalPanel.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(AppThemeColor.DIVIDER_COLOR),
-                BorderFactory.createEmptyBorder(4,4,4,4)
+                BorderFactory.createEmptyBorder(8,4,8,4)
         ));
         JTextField titleField = this.componentsFactory.getTextField(((TestDescriptor) this.payload).getTitle());
         JTextField thresholdField = this.componentsFactory.getTextField(
@@ -55,20 +56,22 @@ public class CreateTestPanel extends PageJPanel implements AsSubscriber{
         generalPanel.add(titleField);
         generalPanel.add(this.componentsFactory.getLabel("Threshold:"));
         generalPanel.add(thresholdField);
-        return generalPanel;
+        return UIUtils.wrapToSlide(generalPanel);
     }
-    private JScrollPane getListEntryPanel(){
+    private JPanel getListEntryPanel(){
         this.entriesContainer = new VerticalScrollContainer();
         this.entriesContainer.setBackground(AppThemeColor.BACKGROUND);
         this.entriesContainer.setLayout(new BoxLayout(this.entriesContainer,BoxLayout.Y_AXIS));
         this.entriesContainer.setMaximumSize(this.getPreferredSize());
         JScrollPane scrollPane = this.componentsFactory.getScrollPane(this.entriesContainer);
         scrollPane.setPreferredSize(new Dimension(200,30));
+        scrollPane.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(AppThemeColor.DIVIDER_COLOR),
+                BorderFactory.createEmptyBorder(4,4,4,4)
+        ));
 
         JPanel miscPanel = this.componentsFactory.getJPanel(new BorderLayout());
         JButton addNewButton = this.componentsFactory.getIconButton("app/add_block.png", 30, "");
-
-
         addNewButton.addActionListener(action -> {
             Component layoutComponent = ((BorderLayout) this.root.getLayout()).getLayoutComponent(BorderLayout.CENTER);
             if(layoutComponent != null) {
@@ -76,7 +79,7 @@ public class CreateTestPanel extends PageJPanel implements AsSubscriber{
             }
             QuestionBlock newBlock = new QuestionBlock("Title#", new ArrayList<>());
 
-            this.root.add(new QuestionBlockAreaPanel(newBlock),BorderLayout.CENTER);
+            this.root.add(UIUtils.wrapToSlide(new QuestionBlockAreaPanel(newBlock)),BorderLayout.CENTER);
             this.entriesContainer.add(new QuestionBlockPanel(newBlock));
 
             SubjectsStore.packSubject.onNext(true);
@@ -89,7 +92,9 @@ public class CreateTestPanel extends PageJPanel implements AsSubscriber{
             this.entriesContainer.add(new QuestionBlockPanel(block));
         });
 
-        return scrollPane;
+        JPanel panel = UIUtils.wrapToSlide(scrollPane);
+        panel.setBorder(BorderFactory.createEmptyBorder(8,4,8,8));
+        return panel;
     }
 
     @Override

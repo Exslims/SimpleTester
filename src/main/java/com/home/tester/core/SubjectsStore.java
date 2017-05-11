@@ -9,4 +9,5 @@ public class SubjectsStore {
     public static final PublishSubject<Boolean> packSubject = PublishSubject.create();
     public static final PublishSubject<QuestionBlock> blockChangedSubject = PublishSubject.create();
     public static final PublishSubject<QuestionBlock> blockRemovingSubject = PublishSubject.create();
+    public static final PublishSubject<QuestionBlock> blockSelectingSubject = PublishSubject.create();
 }
