@@ -15,9 +15,14 @@ public class QuestionBlock {
     private String title;
     @Getter @Setter
     private List<Answer> answers = new ArrayList<>();
+    @Getter @Setter
+    private QuestionType type;
 
-    public QuestionBlock(){
+    public QuestionBlock(String title, List<Answer> answers, QuestionType type){
         this.id = idGenerator.incrementAndGet();
+        this.title = title;
+        this.answers = answers;
+        this.type = type;
     }
     public QuestionBlock(String title, List<Answer> answers){
         this.id = idGenerator.incrementAndGet();

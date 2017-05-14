@@ -1,6 +1,7 @@
 package com.home.tester.ui;
 
 
+import com.home.tester.ui.panels.utils.CircleProgressBarUI;
 import com.home.tester.ui.panels.utils.ScrollUI;
 import com.home.tester.ui.panels.utils.VerticalScrollContainer;
 import org.imgscalr.Scalr;
@@ -33,7 +34,7 @@ public class ComponentsFactory {
         JLabel label = new JLabel(text);
         label.setHorizontalAlignment(align);
         label.setForeground(AppThemeColor.PRIMARY_TEXT);
-        label.setFont(REGULAR_FONT.deriveFont(18f));
+        label.setFont(REGULAR_FONT.deriveFont(16f));
         return label;
     }
     public JLabel getLabel(String text, float size, Color foreground) {
@@ -45,7 +46,7 @@ public class ComponentsFactory {
     public JTextField getTextField(String text){
         JTextField textField = new JTextField(text);
         textField.setForeground(AppThemeColor.PRIMARY_TEXT);
-        textField.setFont(REGULAR_FONT.deriveFont(18f));
+        textField.setFont(REGULAR_FONT.deriveFont(16f));
         return textField;
     }
     public JLabel getIconLabel(String iconPath, int iconSize) {
@@ -101,7 +102,7 @@ public class ComponentsFactory {
         return button;
     }
     public JButton getButton(String text) {
-        JButton button = new JButton(""){
+        JButton button = new JButton(text){
             @Override
             protected void paintBorder(Graphics g) {
                 if(!this.getModel().isPressed()) {
@@ -109,10 +110,9 @@ public class ComponentsFactory {
                 }
             }
         };
-        button.setBorder(BorderFactory.createLineBorder(AppThemeColor.PRIMARY_COLOR));
+        button.setBorder(BorderFactory.createLineBorder(AppThemeColor.DIVIDER_COLOR));
         button.setForeground(AppThemeColor.PRIMARY_COLOR);
-        button.setFont(BOLD_FONT.deriveFont(24f));
-        button.setText(text);
+        button.setFont(BOLD_FONT.deriveFont(20f));
         button.setBackground(AppThemeColor.BACKGROUND);
         button.setFocusPainted(false);
         button.addChangeListener(e->{
@@ -126,6 +126,11 @@ public class ComponentsFactory {
     public JPanel getJPanel(LayoutManager layoutManager){
         JPanel panel = new JPanel(layoutManager);
         panel.setBackground(AppThemeColor.BACKGROUND);
+        return panel;
+    }
+    public JPanel getJPanel(LayoutManager layoutManager,Color background){
+        JPanel panel = new JPanel(layoutManager);
+        panel.setBackground(background);
         return panel;
     }
     public JPanel getVerticalJPanel(){
@@ -155,5 +160,16 @@ public class ComponentsFactory {
         vBar.setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
 
         return scrollPane;
+    }
+    public JProgressBar getCircleProgressBar(int value){
+        JProgressBar progressBar = new JProgressBar();
+        progressBar.setMaximum(100);
+        progressBar.setValue(value);
+        progressBar.setUI(new CircleProgressBarUI());
+        progressBar.setStringPainted(true);
+        progressBar.setBorderPainted(false);
+        progressBar.setFont(BOLD_FONT.deriveFont(13f));
+        progressBar.setBackground(AppThemeColor.BACKGROUND);
+        return progressBar;
     }
 }

@@ -9,8 +9,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public abstract class PageJPanel<T> extends JPanel {
+    protected JPanel navBar;
     protected JButton backButton;
-    protected JButton finishButton;
+    protected JButton nextButton;
     protected T payload;
     protected ComponentsFactory componentsFactory = new ComponentsFactory();
     protected PageJPanel(){
@@ -21,32 +22,29 @@ public abstract class PageJPanel<T> extends JPanel {
         init();
     }
     protected abstract void init();
-    protected void onFinish(){
-        SubjectsStore.stateSubject.onNext(new ApplicationReducer<>(ApplicationState.DASHBOARD,null));
-    }
+    protected abstract void onNext();
+    protected abstract void onBack();
     public void setPayload(T payload) {
         this.payload = payload;
         this.init();
     }
     protected void createNavigationBar(){
-        JPanel root = this.componentsFactory.getJPanel(new BorderLayout());
-        root.setBackground(AppThemeColor.BACKGROUND_DARK);
-        root.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+        this.navBar = this.componentsFactory.getJPanel(new BorderLayout());
+        this.navBar.setBackground(AppThemeColor.BACKGROUND_DARK);
+        this.navBar.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 
         this.backButton = componentsFactory.getIconButton("app/prev_button.png",36,"");
         this.backButton.setBorder(BorderFactory.createLineBorder(AppThemeColor.DIVIDER_COLOR));
         this.backButton.setPreferredSize(new Dimension(110,30));
-        this.backButton.addActionListener(action -> {
-            SubjectsStore.stateSubject.onNext(new ApplicationReducer<>(ApplicationState.DASHBOARD,null));
-        });
+        this.backButton.addActionListener(action -> onBack());
 
-        this.finishButton = componentsFactory.getIconButton("app/next_button.png",36,"");
-        this.finishButton.setBorder(BorderFactory.createLineBorder(AppThemeColor.DIVIDER_COLOR));
-        this.finishButton.setPreferredSize(new Dimension(110,30));
-        this.finishButton.addActionListener(action -> onFinish());
+        this.nextButton = componentsFactory.getIconButton("app/next_button.png",36,"");
+        this.nextButton.setBorder(BorderFactory.createLineBorder(AppThemeColor.DIVIDER_COLOR));
+        this.nextButton.setPreferredSize(new Dimension(110,30));
+        this.nextButton.addActionListener(action -> onNext());
 
-        root.add(backButton,BorderLayout.LINE_START);
-        root.add(finishButton,BorderLayout.LINE_END);
-        this.add(UIUtils.wrapToSlide(root),BorderLayout.PAGE_START);
+        this.navBar.add(backButton,BorderLayout.LINE_START);
+        this.navBar.add(nextButton,BorderLayout.LINE_END);
+        this.add(UIUtils.wrapToSlide(this.navBar),BorderLayout.PAGE_START);
     }
 }

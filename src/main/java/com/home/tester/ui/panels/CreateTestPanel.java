@@ -1,13 +1,15 @@
 package com.home.tester.ui.panels;
 
+import com.home.tester.core.ApplicationReducer;
+import com.home.tester.core.ApplicationState;
 import com.home.tester.core.AsSubscriber;
 import com.home.tester.core.SubjectsStore;
 import com.home.tester.core.entity.QuestionBlock;
 import com.home.tester.core.entity.TestDescriptor;
 import com.home.tester.ui.AppThemeColor;
 import com.home.tester.ui.PageJPanel;
-import com.home.tester.ui.panels.additional.QuestionBlockAreaPanel;
-import com.home.tester.ui.panels.additional.QuestionBlockPanel;
+import com.home.tester.ui.panels.additional.create.CreateQuestionBlockAreaPanel;
+import com.home.tester.ui.panels.additional.create.CreateQuestionBlockPanel;
 import com.home.tester.ui.panels.additional.UIUtils;
 import com.home.tester.ui.panels.utils.VerticalScrollContainer;
 
@@ -25,7 +27,6 @@ public class CreateTestPanel extends PageJPanel implements AsSubscriber{
     protected void init() {
         if(this.payload != null) {
             this.removeAll();
-            this.createNavigationBar();
             this.createForm();
             this.subscribe();
         }
@@ -79,8 +80,8 @@ public class CreateTestPanel extends PageJPanel implements AsSubscriber{
             }
             QuestionBlock newBlock = new QuestionBlock("Title#", new ArrayList<>());
 
-            this.root.add(UIUtils.wrapToSlide(new QuestionBlockAreaPanel(newBlock)),BorderLayout.CENTER);
-            this.entriesContainer.add(new QuestionBlockPanel(newBlock));
+            this.root.add(UIUtils.wrapToSlide(new CreateQuestionBlockAreaPanel(newBlock)),BorderLayout.CENTER);
+            this.entriesContainer.add(new CreateQuestionBlockPanel(newBlock));
 
             SubjectsStore.packSubject.onNext(true);
         });
@@ -89,7 +90,7 @@ public class CreateTestPanel extends PageJPanel implements AsSubscriber{
 
         this.entriesContainer.add(miscPanel);
         ((TestDescriptor) this.payload).getQuestionBlocks().forEach(block -> {
-            this.entriesContainer.add(new QuestionBlockPanel(block));
+            this.entriesContainer.add(new CreateQuestionBlockPanel(block));
         });
 
         JPanel panel = UIUtils.wrapToSlide(scrollPane);
@@ -98,8 +99,13 @@ public class CreateTestPanel extends PageJPanel implements AsSubscriber{
     }
 
     @Override
-    protected void onFinish() {
-        super.onFinish();
+    protected void onNext() {
+        SubjectsStore.stateSubject.onNext(new ApplicationReducer<>(ApplicationState.DASHBOARD,null));
+    }
+
+    @Override
+    protected void onBack() {
+        SubjectsStore.stateSubject.onNext(new ApplicationReducer<>(ApplicationState.DASHBOARD,null));
     }
 
     private void bindData(JTextField field, DataType dataType){
@@ -124,8 +130,8 @@ public class CreateTestPanel extends PageJPanel implements AsSubscriber{
     public void subscribe() {
         SubjectsStore.blockRemovingSubject.subscribe(block -> {
             Arrays.stream(this.entriesContainer.getComponents()).forEach(component -> {
-                if(component instanceof QuestionBlockPanel){
-                    if(((QuestionBlockPanel) component).getBlock().equals(block)){
+                if(component instanceof CreateQuestionBlockPanel){
+                    if(((CreateQuestionBlockPanel) component).getBlock().equals(block)){
                         this.entriesContainer.remove(component);
                         SubjectsStore.packSubject.onNext(true);
                     }

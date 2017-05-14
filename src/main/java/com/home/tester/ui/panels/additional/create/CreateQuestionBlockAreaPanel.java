@@ -1,10 +1,12 @@
-package com.home.tester.ui.panels.additional;
+package com.home.tester.ui.panels.additional.create;
 
 import com.home.tester.core.AsSubscriber;
 import com.home.tester.core.SubjectsStore;
 import com.home.tester.core.entity.Answer;
 import com.home.tester.core.entity.QuestionBlock;
 import com.home.tester.ui.AppThemeColor;
+import com.home.tester.ui.panels.additional.BaseJPanel;
+import com.home.tester.ui.panels.additional.CheckBoxButton;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +16,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 
-public class QuestionBlockAreaPanel extends BaseJPanel implements AsSubscriber{
+public class CreateQuestionBlockAreaPanel extends BaseJPanel implements AsSubscriber{
     @Getter @Setter
     private QuestionBlock block;
 
@@ -22,7 +24,7 @@ public class QuestionBlockAreaPanel extends BaseJPanel implements AsSubscriber{
     private GridBagConstraints textC;
     private GridBagConstraints removeC;
 
-    public QuestionBlockAreaPanel(QuestionBlock block) {
+    public CreateQuestionBlockAreaPanel(QuestionBlock block) {
         super();
         this.block = block;
         this.setBorder(BorderFactory.createCompoundBorder(
