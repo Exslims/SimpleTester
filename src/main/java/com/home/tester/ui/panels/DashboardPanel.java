@@ -1,10 +1,7 @@
 package com.home.tester.ui.panels;
 
 
-import com.home.tester.core.ApplicationReducer;
-import com.home.tester.core.ApplicationState;
-import com.home.tester.core.AsSubscriber;
-import com.home.tester.core.SubjectsStore;
+import com.home.tester.core.*;
 import com.home.tester.ui.AppThemeColor;
 import com.home.tester.ui.PageJPanel;
 import com.home.tester.ui.panels.additional.ResultBlockPanel;

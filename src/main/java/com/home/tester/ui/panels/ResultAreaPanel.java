@@ -53,18 +53,18 @@ public class ResultAreaPanel extends PageJPanel<ResultBlock> {
         JPanel statusPanel = this.componentsFactory.getJPanel(new BorderLayout());
         JPanel constraintsPanel = this.componentsFactory.getVerticalJPanel();
         constraintsPanel.add(
-                this.componentsFactory.getLabel(this.payload.getRightCount()+"/"+this.payload.getCurrentTest().getQuestionBlocks().size(),
-                        15f,AppThemeColor.SECONDARY_TEXT)
+                this.componentsFactory.getLabel("Result: " + this.payload.getRightCount()+"/"+this.payload.getCurrentTest().getQuestionBlocks().size(),
+                        18f,AppThemeColor.SECONDARY_TEXT)
         );
         constraintsPanel.add(
-                this.componentsFactory.getLabel(this.payload.getRightCount() +".00",
-                        15f,AppThemeColor.SECONDARY_TEXT)
+                this.componentsFactory.getLabel("Duration: " + this.payload.getRightCount() +".00",
+                        18f,AppThemeColor.SECONDARY_TEXT)
         );
         statusPanel.add(constraintsPanel,BorderLayout.CENTER);
         String status = (this.payload.getCurrentTest().getThreshold() > this.payload.getRightCount())? "Status: NOT PASSED" :
                 "Status: PASSED";
         statusPanel.add(this.componentsFactory.getLabel(status,
-                17f,AppThemeColor.PRIMARY_TEXT),BorderLayout.PAGE_END);
+                24f,AppThemeColor.PRIMARY_TEXT),BorderLayout.PAGE_END);
         root.add(statusPanel,BorderLayout.PAGE_END);
         return root;
     }

@@ -15,6 +15,7 @@ public abstract class BaseDialog<T,P> extends JDialog {
         this.callback = callback;
         this.setModal(true);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.getRootPane().setBorder(BorderFactory.createEmptyBorder(4,4,4,4));
         this.createView();
         this.pack();
         this.setLocationRelativeTo(relative);

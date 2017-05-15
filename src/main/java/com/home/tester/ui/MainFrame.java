@@ -14,6 +14,7 @@ public class MainFrame extends JFrame implements AsSubscriber{
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setVisible(true);
         this.setPreferredSize(new Dimension(1000,700));
+        this.setMinimumSize(new Dimension(1000,700));
         this.subscribe();
         this.pack();
         this.setLocationRelativeTo(null);

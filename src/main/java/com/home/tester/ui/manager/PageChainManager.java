@@ -7,6 +7,7 @@ import com.home.tester.core.AsSubscriber;
 import com.home.tester.core.entity.ResultBlock;
 import com.home.tester.core.entity.TestDescriptor;
 import com.home.tester.ui.MainFrame;
+import com.home.tester.ui.dialog.TestSelectorDialog;
 import com.home.tester.ui.panels.CreateTestPanel;
 import com.home.tester.ui.panels.DashboardPanel;
 import com.home.tester.ui.panels.ResultAreaPanel;
@@ -55,8 +56,18 @@ public class PageChainManager implements AsSubscriber{
                     break;
                 }
                 case TEST_AREA: {
-                    this.testAreaPanel.setPayload(ioHelper.getLoadedTests().get(0));
-                    this.mainFrame.setContentPanel(testAreaPanel);
+                    if(state.getPayload() != null){
+                        this.testAreaPanel.setPayload((TestDescriptor) state.getPayload());
+                        this.mainFrame.setContentPanel(testAreaPanel);
+                    }else {
+                        IOHelper ioHelper = new IOHelper();
+                        new TestSelectorDialog(selectedTest -> {
+                            if (selectedTest != null) {
+                                this.testAreaPanel.setPayload(selectedTest);
+                                this.mainFrame.setContentPanel(testAreaPanel);
+                            }
+                        }, null, ioHelper.getLoadedTests());
+                    }
                     break;
                 }
                 case CREATE_TEST: {
@@ -65,8 +76,12 @@ public class PageChainManager implements AsSubscriber{
                     break;
                 }
                 case EDIT_TEST: {
-                    this.createTestPanel.setPayload(ioHelper.getLoadedTests().get(0)); //todo
-                    this.mainFrame.setContentPanel(createTestPanel);
+                    new TestSelectorDialog(selectedTest -> {
+                        if(selectedTest != null) {
+                            this.createTestPanel.setPayload(selectedTest);
+                            this.mainFrame.setContentPanel(createTestPanel);
+                        }
+                    },null,ioHelper.getLoadedTests());
                     break;
                 }
             }

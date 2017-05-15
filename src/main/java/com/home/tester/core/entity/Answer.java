@@ -1,9 +1,11 @@
 package com.home.tester.core.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
+@EqualsAndHashCode
 @NoArgsConstructor
 public class Answer {
     private String text;

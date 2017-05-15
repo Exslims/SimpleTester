@@ -1,6 +1,9 @@
 package com.home.tester.ui.panels.additional;
 
 
+import com.home.tester.core.ApplicationReducer;
+import com.home.tester.core.ApplicationState;
+import com.home.tester.core.SubjectsStore;
 import com.home.tester.core.entity.ResultBlock;
 import com.home.tester.ui.AppThemeColor;
 
@@ -42,7 +45,9 @@ public class ResultBlockPanel extends BaseJPanel {
 
         JPanel statusPanel = this.componentsFactory.getGridJPanel(1,2);
         JButton restartButton = this.componentsFactory.getIconButton("app/restart.png", 26, "");
-
+        restartButton.addActionListener(action -> {
+            SubjectsStore.stateSubject.onNext(new ApplicationReducer<>(ApplicationState.TEST_AREA,this.resultBlock.getCurrentTest()));
+        });
         String statusIconPath = (this.resultBlock.getCurrentTest().getThreshold() > this.resultBlock.getRightCount())? "app/wrong_answer.png" :
                 "app/checked.png";
         statusPanel.add(restartButton);

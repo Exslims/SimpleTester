@@ -31,7 +31,9 @@ public class CreateQuestionBlockAreaPanel extends BaseJPanel implements AsSubscr
                 BorderFactory.createMatteBorder(1,1,1,1,AppThemeColor.DIVIDER_COLOR),
                 BorderFactory.createEmptyBorder(8,4,8,4)
         ));
-        this.createView();
+        if(block != null) {
+            this.createView();
+        }
         this.subscribe();
     }
 

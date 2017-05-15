@@ -8,6 +8,7 @@ import com.home.tester.core.entity.QuestionBlock;
 import com.home.tester.core.entity.TestDescriptor;
 import com.home.tester.ui.AppThemeColor;
 import com.home.tester.ui.PageJPanel;
+import com.home.tester.ui.dialog.AlertDialog;
 import com.home.tester.ui.panels.additional.CheckBoxButton;
 import com.home.tester.ui.panels.additional.create.CreateQuestionBlockAreaPanel;
 import com.home.tester.ui.panels.additional.create.CreateQuestionBlockPanel;
@@ -78,19 +79,15 @@ public class CreateTestPanel extends PageJPanel<TestDescriptor> implements AsSub
                 BorderFactory.createLineBorder(AppThemeColor.DIVIDER_COLOR),
                 BorderFactory.createEmptyBorder(4,4,4,4)
         ));
-
+        this.root.add(UIUtils.wrapToSlide(new CreateQuestionBlockAreaPanel(null)),BorderLayout.CENTER);
         JPanel miscPanel = this.componentsFactory.getJPanel(new BorderLayout());
         JButton addNewButton = this.componentsFactory.getIconButton("app/add_block.png", 30, "");
         addNewButton.addActionListener(action -> {
-            Component layoutComponent = ((BorderLayout) this.root.getLayout()).getLayoutComponent(BorderLayout.CENTER);
-            if(layoutComponent != null) {
-                this.root.remove(layoutComponent);
-            }
             QuestionBlock newBlock = new QuestionBlock("Title#", new ArrayList<>());
 
-            this.root.add(UIUtils.wrapToSlide(new CreateQuestionBlockAreaPanel(newBlock)),BorderLayout.CENTER);
+            SubjectsStore.blockSelectingSubject.onNext(newBlock);
             this.entriesContainer.add(new CreateQuestionBlockPanel(newBlock));
-
+            this.payload.getQuestionBlocks().add(newBlock);
             SubjectsStore.packSubject.onNext(true);
         });
         miscPanel.add(this.componentsFactory.getLabel("Questions:"),BorderLayout.CENTER);
@@ -108,12 +105,23 @@ public class CreateTestPanel extends PageJPanel<TestDescriptor> implements AsSub
 
     @Override
     protected void onNext() {
-        SubjectsStore.stateSubject.onNext(new ApplicationReducer<>(ApplicationState.DASHBOARD,null));
+        if(this.payload.getQuestionBlocks().size() > 0){
+            new AlertDialog(value -> {
+                if(value) {
+                    SubjectsStore.stateSubject.onNext(new ApplicationReducer<>(ApplicationState.DASHBOARD, null));
+                }
+            },"Do you want to continue?",this);
+        }
+
     }
 
     @Override
     protected void onBack() {
-        SubjectsStore.stateSubject.onNext(new ApplicationReducer<>(ApplicationState.DASHBOARD,null));
+        new AlertDialog(value -> {
+            if(value) {
+                SubjectsStore.stateSubject.onNext(new ApplicationReducer<>(ApplicationState.DASHBOARD, null));
+            }
+        },"Do you want to quit?",this);
     }
 
     private void bindData(JTextField field, DataType dataType){
@@ -141,6 +149,7 @@ public class CreateTestPanel extends PageJPanel<TestDescriptor> implements AsSub
                 if(component instanceof CreateQuestionBlockPanel){
                     if(((CreateQuestionBlockPanel) component).getBlock().equals(block)){
                         this.entriesContainer.remove(component);
+                        this.payload.getQuestionBlocks().remove(block);
                         SubjectsStore.packSubject.onNext(true);
                     }
                 }

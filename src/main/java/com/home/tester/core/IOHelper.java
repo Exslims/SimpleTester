@@ -9,7 +9,9 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class IOHelper {
     @Getter
@@ -31,7 +33,7 @@ public class IOHelper {
         test1.setRandomizeAnswers(true);
         test1.setRandomizeQuestions(true);
 
-        test1.setQuestionBlocks(Arrays.asList(
+        test1.setQuestionBlocks(Arrays.stream(new QuestionBlock[]{
                 new QuestionBlock("Question block#1", Arrays.asList(
                         new Answer("Answer#1",false),
                         new Answer("Answer#2",true),
@@ -59,24 +61,9 @@ public class IOHelper {
                         new Answer("Answer#3",false)
                 ), QuestionType.SINGLE),
                 new QuestionBlock("Question block#3", Arrays.asList(
-                new Answer("Answer#1",false),
-                new Answer("Answer#2",true),
-                new Answer("Answer#3",false)
-        ), QuestionType.SINGLE),
-                new QuestionBlock("Question block#3", Arrays.asList(
-                        new Answer("Answer#1",false),
-                        new Answer("Answer#2",true),
-                        new Answer("Answer#3",false)
-                ), QuestionType.SINGLE),
-                new QuestionBlock("Question block#3", Arrays.asList(
-                        new Answer("Answer#1",false),
-                        new Answer("Answer#2",false),
-                        new Answer("Answer#3",false)
-                ), QuestionType.SINGLE),
-                new QuestionBlock("Question block#3", Arrays.asList(
-                        new Answer("Answer#1",false),
-                        new Answer("Answer#2",true),
-                        new Answer("Answer#3",false)
+                    new Answer("Answer#1",false),
+                    new Answer("Answer#2",true),
+                    new Answer("Answer#3",false)
                 ), QuestionType.SINGLE),
                 new QuestionBlock("Question block#3", Arrays.asList(
                         new Answer("Answer#1",false),
@@ -102,11 +89,26 @@ public class IOHelper {
                         new Answer("Answer#1",false),
                         new Answer("Answer#2",false),
                         new Answer("Answer#3",false)
-                ), QuestionType.SINGLE)
-        ));
+                ), QuestionType.SINGLE),
+                new QuestionBlock("Question block#3", Arrays.asList(
+                        new Answer("Answer#1",false),
+                        new Answer("Answer#2",true),
+                        new Answer("Answer#3",false)
+                ), QuestionType.SINGLE),
+                new QuestionBlock("Question block#3", Arrays.asList(
+                        new Answer("Answer#1",false),
+                        new Answer("Answer#2",true),
+                        new Answer("Answer#3",false)
+                ), QuestionType.SINGLE),
+                new QuestionBlock("Question block#3", Arrays.asList(
+                        new Answer("Answer#1",false),
+                        new Answer("Answer#2",false),
+                        new Answer("Answer#3",false)
+                ), QuestionType.SINGLE)}).collect(Collectors.toList())
+        );
 
         TestDescriptor test2 = new TestDescriptor();
-        test2.setTitle("Test#1");
+        test2.setTitle("Test#2");
         test2.setThreshold(5);
         test2.setTime(10);
         test2.setRandomizeAnswers(true);

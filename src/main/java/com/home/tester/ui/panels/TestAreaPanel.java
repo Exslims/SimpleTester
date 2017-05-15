@@ -71,7 +71,7 @@ public class TestAreaPanel extends PageJPanel<TestDescriptor> {
                 }
             }, "Do you want to continue?",this);
         }else {
-            currentIndex++;
+            this.currentIndex++;
             this.initForm();
             SubjectsStore.packSubject.onNext(true);
         }
@@ -79,6 +79,16 @@ public class TestAreaPanel extends PageJPanel<TestDescriptor> {
 
     @Override
     protected void onBack() {
-        SubjectsStore.stateSubject.onNext(new ApplicationReducer<>(ApplicationState.DASHBOARD,null));
+        if(this.currentIndex == 0){
+            new AlertDialog(value -> {
+                if(value) {
+                    SubjectsStore.stateSubject.onNext(new ApplicationReducer<>(ApplicationState.DASHBOARD, null));
+                }
+            },"Do you want to quit?",this);
+        }else {
+            this.currentIndex--;
+            this.initForm();
+            SubjectsStore.packSubject.onNext(true);
+        }
     }
 }
