@@ -2,8 +2,10 @@ package com.home.tester.ui.panels;
 
 import com.home.tester.core.ApplicationReducer;
 import com.home.tester.core.ApplicationState;
+import com.home.tester.core.ResultChecker;
 import com.home.tester.core.SubjectsStore;
 import com.home.tester.core.entity.QuestionBlock;
+import com.home.tester.core.entity.ResultBlock;
 import com.home.tester.core.entity.TestDescriptor;
 import com.home.tester.ui.AppThemeColor;
 import com.home.tester.ui.PageJPanel;
@@ -21,6 +23,7 @@ public class TestAreaPanel extends PageJPanel<TestDescriptor> {
     private int currentIndex;
     private QuestionBlock currentQuestion;
     private List<QuestionBlock> questions;
+    private int duration;
     @Override
     protected void init() {
         if(this.payload != null){
@@ -54,8 +57,17 @@ public class TestAreaPanel extends PageJPanel<TestDescriptor> {
         if(this.currentIndex + 1 == this.questions.size()){
             new AlertDialog(value -> {
                 if(value){
+                    ResultChecker checker = new ResultChecker();
 
-                    SubjectsStore.stateSubject.onNext(new ApplicationReducer<>(ApplicationState.DASHBOARD, null));
+                    ResultBlock resultBlock = new ResultBlock();
+                    resultBlock.setCurrentTest(this.payload);
+                    resultBlock.setPassedQuestions(this.questions);
+                    resultBlock.setDurationTime(this.duration);
+                    resultBlock.setPercent(checker.getResultFrom(this.questions));
+                    resultBlock.setRightCount(checker.getRCount());
+
+                    SubjectsStore.stateSubject.onNext(new ApplicationReducer<>(ApplicationState.RESULT_AREA,resultBlock));
+                    SubjectsStore.passedTestsSubject.onNext(resultBlock);
                 }
             }, "Do you want to continue?",this);
         }else {

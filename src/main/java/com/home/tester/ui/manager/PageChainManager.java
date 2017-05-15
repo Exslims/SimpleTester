@@ -4,6 +4,7 @@ package com.home.tester.ui.manager;
 import com.home.tester.core.IOHelper;
 import com.home.tester.core.SubjectsStore;
 import com.home.tester.core.AsSubscriber;
+import com.home.tester.core.entity.ResultBlock;
 import com.home.tester.core.entity.TestDescriptor;
 import com.home.tester.ui.MainFrame;
 import com.home.tester.ui.panels.CreateTestPanel;
@@ -49,6 +50,7 @@ public class PageChainManager implements AsSubscriber{
                     break;
                 }
                 case RESULT_AREA: {
+                    this.resultAreaPanel.setPayload((ResultBlock) state.getPayload());
                     this.mainFrame.setContentPanel(resultAreaPanel);
                     break;
                 }

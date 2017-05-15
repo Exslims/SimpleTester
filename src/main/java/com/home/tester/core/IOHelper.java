@@ -26,7 +26,7 @@ public class IOHelper {
     private List<TestDescriptor> getStubTests(){
         TestDescriptor test1 = new TestDescriptor();
         test1.setTitle("Test#1");
-        test1.setThreshold(5);
+        test1.setThreshold(3);
         test1.setTime(10);
         test1.setRandomizeAnswers(true);
         test1.setRandomizeQuestions(true);
@@ -46,6 +46,61 @@ public class IOHelper {
                 new QuestionBlock("Question block#3", Arrays.asList(
                         new Answer("Answer#1",false),
                         new Answer("Answer#2",true),
+                        new Answer("Answer#3",false)
+                ), QuestionType.SINGLE),
+                new QuestionBlock("Question block#3", Arrays.asList(
+                        new Answer("Answer#1",false),
+                        new Answer("Answer#2",true),
+                        new Answer("Answer#3",false)
+                ), QuestionType.SINGLE),
+                new QuestionBlock("Question block#3", Arrays.asList(
+                        new Answer("Answer#1",false),
+                        new Answer("Answer#2",true),
+                        new Answer("Answer#3",false)
+                ), QuestionType.SINGLE),
+                new QuestionBlock("Question block#3", Arrays.asList(
+                new Answer("Answer#1",false),
+                new Answer("Answer#2",true),
+                new Answer("Answer#3",false)
+        ), QuestionType.SINGLE),
+                new QuestionBlock("Question block#3", Arrays.asList(
+                        new Answer("Answer#1",false),
+                        new Answer("Answer#2",true),
+                        new Answer("Answer#3",false)
+                ), QuestionType.SINGLE),
+                new QuestionBlock("Question block#3", Arrays.asList(
+                        new Answer("Answer#1",false),
+                        new Answer("Answer#2",false),
+                        new Answer("Answer#3",false)
+                ), QuestionType.SINGLE),
+                new QuestionBlock("Question block#3", Arrays.asList(
+                        new Answer("Answer#1",false),
+                        new Answer("Answer#2",true),
+                        new Answer("Answer#3",false)
+                ), QuestionType.SINGLE),
+                new QuestionBlock("Question block#3", Arrays.asList(
+                        new Answer("Answer#1",false),
+                        new Answer("Answer#2",true),
+                        new Answer("Answer#3",false)
+                ), QuestionType.SINGLE),
+                new QuestionBlock("Question block#3", Arrays.asList(
+                        new Answer("Answer#1",false),
+                        new Answer("Answer#2",false),
+                        new Answer("Answer#3",false)
+                ), QuestionType.SINGLE),
+                new QuestionBlock("Question block#3", Arrays.asList(
+                        new Answer("Answer#1",false),
+                        new Answer("Answer#2",true),
+                        new Answer("Answer#3",false)
+                ), QuestionType.SINGLE),
+                new QuestionBlock("Question block#3", Arrays.asList(
+                        new Answer("Answer#1",false),
+                        new Answer("Answer#2",true),
+                        new Answer("Answer#3",false)
+                ), QuestionType.SINGLE),
+                new QuestionBlock("Question block#3", Arrays.asList(
+                        new Answer("Answer#1",false),
+                        new Answer("Answer#2",false),
                         new Answer("Answer#3",false)
                 ), QuestionType.SINGLE)
         ));

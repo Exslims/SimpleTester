@@ -13,7 +13,6 @@ import com.home.tester.ui.panels.utils.VerticalScrollContainer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Random;
 
 
 public class DashboardPanel extends PageJPanel implements AsSubscriber{
@@ -51,9 +50,6 @@ public class DashboardPanel extends PageJPanel implements AsSubscriber{
 
         this.recentlyContainer.add(UIUtils.wrapToSlide(miscPanel));
 
-        for (int i = 0; i < 5; i++) {
-            this.recentlyContainer.add(UIUtils.wrapToSlide(new ResultBlockPanel(new Random().nextInt(100))));
-        }
         return UIUtils.wrapToSlide(scrollPane);
     }
     private JPanel getOperationsPanel(){
@@ -80,6 +76,9 @@ public class DashboardPanel extends PageJPanel implements AsSubscriber{
 
     @Override
     public void subscribe() {
-
+        SubjectsStore.passedTestsSubject.subscribe(resultBlock -> {
+            this.recentlyContainer.add(UIUtils.wrapToSlide(new ResultBlockPanel(resultBlock)));
+            SubjectsStore.packSubject.onNext(true);
+        });
     }
 }

@@ -89,13 +89,7 @@ public class ComponentsFactory {
             }
         });
         button.setVerticalAlignment(SwingConstants.CENTER);
-        BufferedImage icon = null;
-        try {
-            BufferedImage buttonIcon = ImageIO.read(getClass().getClassLoader().getResource(iconPath));
-            icon = Scalr.resize(buttonIcon, iconSize);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        BufferedImage icon = getIcon(iconPath,iconSize);
         if(icon != null){
             button.setIcon(new ImageIcon(icon));
         }
@@ -162,15 +156,27 @@ public class ComponentsFactory {
 
         return scrollPane;
     }
-    public JProgressBar getCircleProgressBar(int value){
+    public JProgressBar getCircleProgressBar(int value, float fontSize){
         JProgressBar progressBar = new JProgressBar();
         progressBar.setMaximum(100);
         progressBar.setValue(value);
+        progressBar.setBorder(null);
         progressBar.setUI(new CircleProgressBarUI());
         progressBar.setStringPainted(true);
         progressBar.setBorderPainted(false);
-        progressBar.setFont(BOLD_FONT.deriveFont(13f));
+        progressBar.setFont(REGULAR_FONT.deriveFont(fontSize));
         progressBar.setBackground(AppThemeColor.BACKGROUND);
         return progressBar;
+    }
+    @SuppressWarnings("all")
+    public BufferedImage getIcon(String path, int size){
+        BufferedImage icon = null;
+        try {
+            BufferedImage buttonIcon = ImageIO.read(getClass().getClassLoader().getResource(path));
+            icon = Scalr.resize(buttonIcon, size);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return icon;
     }
 }

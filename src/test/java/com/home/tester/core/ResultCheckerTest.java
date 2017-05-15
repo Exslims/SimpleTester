@@ -19,7 +19,7 @@ public class ResultCheckerTest {
         ioHelper.getLoadedTests().get(1).getQuestionBlocks().get(1).getAnswers().get(1).setMask(true);
         ioHelper.getLoadedTests().get(1).getQuestionBlocks().get(1).getAnswers().get(3).setMask(true);
 
-        assertEquals(33,checker.getResultFrom(ioHelper.getLoadedTests().get(0)));
-        assertEquals(50,checker.getResultFrom(ioHelper.getLoadedTests().get(1)));
+        assertEquals(33,checker.getResultFrom(ioHelper.getLoadedTests().get(0).getQuestionBlocks()));
+        assertEquals(50,checker.getResultFrom(ioHelper.getLoadedTests().get(1).getQuestionBlocks()));
     }
 }
