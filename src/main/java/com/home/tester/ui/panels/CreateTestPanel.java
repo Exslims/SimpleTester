@@ -8,6 +8,7 @@ import com.home.tester.core.entity.QuestionBlock;
 import com.home.tester.core.entity.TestDescriptor;
 import com.home.tester.ui.AppThemeColor;
 import com.home.tester.ui.PageJPanel;
+import com.home.tester.ui.panels.additional.CheckBoxButton;
 import com.home.tester.ui.panels.additional.create.CreateQuestionBlockAreaPanel;
 import com.home.tester.ui.panels.additional.create.CreateQuestionBlockPanel;
 import com.home.tester.ui.panels.additional.UIUtils;
@@ -20,13 +21,14 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class CreateTestPanel extends PageJPanel implements AsSubscriber{
+public class CreateTestPanel extends PageJPanel<TestDescriptor> implements AsSubscriber{
     private VerticalScrollContainer entriesContainer;
     private JPanel root;
     @Override
     protected void init() {
         if(this.payload != null) {
             this.removeAll();
+            this.createNavigationBar();
             this.createForm();
             this.subscribe();
         }
@@ -41,14 +43,14 @@ public class CreateTestPanel extends PageJPanel implements AsSubscriber{
         this.add(root, BorderLayout.CENTER);
     }
     private JPanel getGeneralPanel() {
-        JPanel generalPanel = this.componentsFactory.getGridJPanel(2,2);
+        JPanel generalPanel = this.componentsFactory.getGridJPanel(2,4);
         generalPanel.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(AppThemeColor.DIVIDER_COLOR),
                 BorderFactory.createEmptyBorder(8,4,8,4)
         ));
-        JTextField titleField = this.componentsFactory.getTextField(((TestDescriptor) this.payload).getTitle());
+        JTextField titleField = this.componentsFactory.getTextField(this.payload.getTitle());
         JTextField thresholdField = this.componentsFactory.getTextField(
-                String.valueOf(((TestDescriptor) this.payload).getThreshold()));
+                String.valueOf(this.payload.getThreshold()));
 
         this.bindData(titleField,DataType.TEST_TITLE);
         this.bindData(thresholdField,DataType.THRESHOLD);
@@ -57,6 +59,12 @@ public class CreateTestPanel extends PageJPanel implements AsSubscriber{
         generalPanel.add(titleField);
         generalPanel.add(this.componentsFactory.getLabel("Threshold:"));
         generalPanel.add(thresholdField);
+        generalPanel.add(this.componentsFactory.getLabel("Randomize questions:"));
+        generalPanel.add(new CheckBoxButton(this.payload.isRandomizeQuestions(), isSelected ->
+                this.payload.setRandomizeQuestions(isSelected),30));
+        generalPanel.add(this.componentsFactory.getLabel("Randomize answers:"));
+        generalPanel.add(new CheckBoxButton(this.payload.isRandomizeAnswers(), isSelected ->
+                this.payload.setRandomizeAnswers(isSelected),30));
         return UIUtils.wrapToSlide(generalPanel);
     }
     private JPanel getListEntryPanel(){
@@ -89,7 +97,7 @@ public class CreateTestPanel extends PageJPanel implements AsSubscriber{
         miscPanel.add(addNewButton,BorderLayout.LINE_END);
 
         this.entriesContainer.add(miscPanel);
-        ((TestDescriptor) this.payload).getQuestionBlocks().forEach(block -> {
+        this.payload.getQuestionBlocks().forEach(block -> {
             this.entriesContainer.add(new CreateQuestionBlockPanel(block));
         });
 
@@ -114,11 +122,11 @@ public class CreateTestPanel extends PageJPanel implements AsSubscriber{
             public void keyTyped(KeyEvent e) {
                 switch (dataType){
                     case TEST_TITLE: {
-                        ((TestDescriptor) payload).setTitle(field.getText());
+                        payload.setTitle(field.getText());
                         break;
                     }
                     case THRESHOLD: {
-                        ((TestDescriptor) payload).setThreshold(Integer.valueOf(field.getText()));
+                        payload.setThreshold(Integer.valueOf(field.getText()));
                         break;
                     }
                 }

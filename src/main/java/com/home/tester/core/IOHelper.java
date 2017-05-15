@@ -37,13 +37,13 @@ public class IOHelper {
                         new Answer("Answer#2",true),
                         new Answer("Answer#3",false)
                 ), QuestionType.SINGLE),
-                new QuestionBlock("Question block#1", Arrays.asList(
+                new QuestionBlock("Question block#2", Arrays.asList(
                         new Answer("Answer#1",false),
                         new Answer("Answer#2",true),
                         new Answer("Answer#3",false),
                         new Answer("Answer#4",true)
                 ), QuestionType.MULTIPLE),
-                new QuestionBlock("Question block#1", Arrays.asList(
+                new QuestionBlock("Question block#3", Arrays.asList(
                         new Answer("Answer#1",false),
                         new Answer("Answer#2",true),
                         new Answer("Answer#3",false)
@@ -63,18 +63,18 @@ public class IOHelper {
                         new Answer("Answer#2",true),
                         new Answer("Answer#3",false)
                 ), QuestionType.SINGLE),
-                new QuestionBlock("Question block#1", Arrays.asList(
+                new QuestionBlock("Question block#2", Arrays.asList(
                         new Answer("Answer#1",false),
                         new Answer("Answer#2",true),
                         new Answer("Answer#3",false),
                         new Answer("Answer#4",true)
                 ), QuestionType.MULTIPLE),
-                new QuestionBlock("Question block#1", Arrays.asList(
+                new QuestionBlock("Question block#3", Arrays.asList(
                         new Answer("Answer#1",false),
                         new Answer("Answer#2",true),
                         new Answer("Answer#3",false)
                 ), QuestionType.SINGLE),
-                new QuestionBlock("Question block#1", Arrays.asList(
+                new QuestionBlock("Question block#4", Arrays.asList(
                         new Answer("Answer#1",false),
                         new Answer("Answer#2",false),
                         new Answer("Answer#3",true),

@@ -27,7 +27,7 @@ public class ComponentsFactory {
     public JLabel getLabel(String text) {
         JLabel label = new JLabel(text);
         label.setForeground(AppThemeColor.PRIMARY_TEXT);
-        label.setFont(REGULAR_FONT.deriveFont(18f));
+        label.setFont(REGULAR_FONT.deriveFont(16f));
         return label;
     }
     public JLabel getLabel(String text, int align) {
@@ -114,6 +114,7 @@ public class ComponentsFactory {
         button.setForeground(AppThemeColor.PRIMARY_COLOR);
         button.setFont(BOLD_FONT.deriveFont(20f));
         button.setBackground(AppThemeColor.BACKGROUND);
+        button.setPreferredSize(new Dimension(100,30));
         button.setFocusPainted(false);
         button.addChangeListener(e->{
             if(!button.getModel().isPressed()){

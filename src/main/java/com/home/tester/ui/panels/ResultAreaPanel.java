@@ -1,9 +1,10 @@
 package com.home.tester.ui.panels;
 
+import com.home.tester.core.entity.TestDescriptor;
 import com.home.tester.ui.PageJPanel;
 
 
-public class ResultAreaPanel extends PageJPanel {
+public class ResultAreaPanel extends PageJPanel<TestDescriptor> {
     @Override
     protected void init() {
 

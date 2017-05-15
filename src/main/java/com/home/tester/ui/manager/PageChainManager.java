@@ -1,6 +1,7 @@
 package com.home.tester.ui.manager;
 
 
+import com.home.tester.core.IOHelper;
 import com.home.tester.core.SubjectsStore;
 import com.home.tester.core.AsSubscriber;
 import com.home.tester.core.entity.TestDescriptor;
@@ -20,6 +21,8 @@ public class PageChainManager implements AsSubscriber{
     private TestAreaPanel testAreaPanel;
     private CreateTestPanel createTestPanel;
 
+    private IOHelper ioHelper;
+
     public void start(){
         EventQueue.invokeLater(()-> {
             mainFrame = new MainFrame();
@@ -30,6 +33,7 @@ public class PageChainManager implements AsSubscriber{
             this.testAreaPanel = new TestAreaPanel();
             this.createTestPanel = new CreateTestPanel();
 
+            this.ioHelper = new IOHelper();
             mainFrame.setContentPanel(dashboardPanel);
             subscribe();
         });
@@ -49,12 +53,19 @@ public class PageChainManager implements AsSubscriber{
                     break;
                 }
                 case TEST_AREA: {
+                    this.testAreaPanel.setPayload(ioHelper.getLoadedTests().get(0));
                     this.mainFrame.setContentPanel(testAreaPanel);
                     break;
                 }
                 case CREATE_TEST: {
                     this.createTestPanel.setPayload(new TestDescriptor());
                     this.mainFrame.setContentPanel(createTestPanel);
+                    break;
+                }
+                case EDIT_TEST: {
+                    this.createTestPanel.setPayload(ioHelper.getLoadedTests().get(0)); //todo
+                    this.mainFrame.setContentPanel(createTestPanel);
+                    break;
                 }
             }
         });

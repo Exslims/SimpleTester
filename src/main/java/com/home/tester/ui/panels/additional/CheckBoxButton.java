@@ -58,6 +58,8 @@ public class CheckBoxButton extends JButton {
     }
 
 
+
+
     @Override
     protected void paintBorder(Graphics g) {
         if(!this.getModel().isPressed()) {

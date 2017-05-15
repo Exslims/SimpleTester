@@ -13,7 +13,6 @@ import com.home.tester.ui.panels.utils.VerticalScrollContainer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -62,6 +61,9 @@ public class DashboardPanel extends PageJPanel implements AsSubscriber{
         root.setBorder(BorderFactory.createEmptyBorder(200,200,200,200));
         root.setBackground(AppThemeColor.BACKGROUND_DARK);
         JButton openTest = this.componentsFactory.getButton("OPEN TEST");
+        openTest.addActionListener(action -> {
+            SubjectsStore.stateSubject.onNext(new ApplicationReducer<>(ApplicationState.TEST_AREA,null));
+        });
         root.add(openTest);
         JButton createTest = this.componentsFactory.getButton("CREATE TEST");
         createTest.addActionListener(action -> {
@@ -69,6 +71,9 @@ public class DashboardPanel extends PageJPanel implements AsSubscriber{
         });
         root.add(createTest);
         JButton editTest = this.componentsFactory.getButton("EDIT TEST");
+        editTest.addActionListener(action -> {
+            SubjectsStore.stateSubject.onNext(new ApplicationReducer<>(ApplicationState.EDIT_TEST,null)); //todo
+        });
         root.add(editTest);
         return UIUtils.wrapToSlide(root);
     }

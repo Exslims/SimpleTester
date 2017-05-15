@@ -1,8 +1,5 @@
 package com.home.tester.ui;
 
-import com.home.tester.core.ApplicationReducer;
-import com.home.tester.core.ApplicationState;
-import com.home.tester.core.SubjectsStore;
 import com.home.tester.ui.panels.additional.UIUtils;
 
 import javax.swing.*;
